@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>学校探検ゲーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- 下部メッセージ -->
+  <div id="messageBox"></div>
+
+  <!-- 会話UI -->
+  <div id="dialogueUI">
+    <img id="characterSprite">
+    <div id="nameBox"></div>
+    <div id="textBox"></div>
+  </div>
+
+  <!-- 特殊イベントレイヤー -->
+  <div id="specialOverlay">
+    <img id="specialBg">
+    <img id="specialCharacter">
+    <div id="specialName"></div>
+    <div id="specialText"></div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

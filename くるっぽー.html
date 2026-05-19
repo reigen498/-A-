@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>インストール中...</title>
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:#121212;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial, sans-serif;
+  color:rgb(145, 144, 144);
+  overflow:hidden;
+}
+
+.container{
+  text-align:center;
+}
+
+.circle{
+  position:relative;
+  width:260px;
+  height:260px;
+}
+
+svg{
+  transform: rotate(-90deg);
+}
+
+circle{
+  fill:none;
+  stroke-width:14;
+  stroke-linecap:round;
+}
+
+.bg{ stroke:#333; }
+.progress{
+  stroke:#00c853;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.percent{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:48px;
+  font-weight:bold;
+  pointer-events:none;
+}
+
+.gif{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-70%);
+  width:120px;
+  height:120px;
+  border-radius:20px;
+  object-fit:cover;
+  z-index:-1;
+}
+
+.status{
+  margin-top:30px;
+  font-size:20px;
+  color:#aaa;
+}
+
+/* ノイズ */
+.noise{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:repeating-linear-gradient(
+    0deg,
+    #000 0px,
+    #111 2px,
+    #000 4px
+  );
+  opacity:0;
+  pointer-events:none;
+  animation:noiseAnim 0.2s infinite;
+}
+
+@keyframes noiseAnim{
+  0%{transform:translateX(0);}
+  50%{transform:translateX(5px);}
+  100%{transform:translateX(-5px);}
+}
+
+/* 会話フェーズ */
+#dialogue{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:black;
+  display:none;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+
+#character{
+  position:absolute;
+  bottom:120px;
+  left:50%;
+  transform:translateX(-50%);
+  height:400px;
+  animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%{transform:translateX(-50%) translateY(0);}
+  50%{transform:translateX(-50%) translateY(-10px);}
+  100%{transform:translateX(-50%) translateY(0);}
+}
+
+#nameBox{
+  margin-left:50px;
+  font-size:20px;
+  color:#aaa;
+}
+
+#textBox{
+  height:140px;
+  background:rgba(0,0,0,0.8);
+  padding:20px;
+  font-size:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="installScreen">
+  <div class="circle">
+    <svg width="260" height="260">
+      <circle class="bg" cx="130" cy="130" r="110"></circle>
+      <circle class="progress" cx="130" cy="130" r="110" id="progressCircle"></circle>
+    </svg>
+    <img src="ぎなもろーる.gif" class="gif">
+    <div class="percent" id="percent">0%</div>
+  </div>
+  <div class="status" id="status">ダウンロードを開始しています...</div>
+</div>
+
+<div class="noise" id="noise"></div>
+
+<!-- 会話フェーズ -->
+<div id="dialogue">
+  <img id="character" src="通常会.png">
+  <div id="nameBox"></div>
+  <div id="textBox"></div>
+</div>
+
+<script>
+/* ========= インストール ========= */
+
+let percent = 0;
+const circle = document.getElementById("progressCircle");
+const percentText = document.getElementById("percent");
+const statusText = document.getElementById("status");
+const installScreen = document.getElementById("installScreen");
+const noise = document.getElementById("noise");
+
+const radius = 110;
+const circumference = 2 * Math.PI * radius;
+circle.style.strokeDasharray = circumference;
+circle.style.strokeDashoffset = circumference;
+
+function updateProgress(){
+  const offset = circumference - (percent / 100) * circumference;
+  circle.style.strokeDashoffset = offset;
+  percentText.textContent = percent + "%";
+
+  if(percent >= 100){
+    statusText.textContent = "インストール完了";
+    setTimeout(startNoiseTransition,1000);
+    return;
+  }
+
+  let increase = Math.floor(Math.random() * 12) + 3;
+  percent += increase;
+  if(percent > 100) percent = 100;
+
+  let delay = Math.random() * 1500 + 500;
+  setTimeout(updateProgress, delay);
+}
+
+function startNoiseTransition(){
+  noise.style.opacity = 1;
+  setTimeout(()=>{
+    installScreen.style.display = "none";
+    noise.style.opacity = 0;
+    startDialogue();
+  },2000);
+}
+
+setTimeout(updateProgress,1000);
+
+/* ========= 会話 ========= */
+
+const dialogue = [
+  {name:"ノズル", text:"……こんにちは。", sprite:"通常会.png"},
+  {name:"ノズル", text:"誰かが来るのを待っていたよ", sprite:"通常会.png"},
+  {name:"ノズル", text:"ぼくは行き場をなくしここに行き着いてしまったよ", sprite:"通常会.png"},
+  {name:"ノズル", text:"君もかい？", sprite:"通常会.png"},
+  {name:"ノズル", text:"……", sprite:"通常会.png"},
+  {name:"ノズル", text:"答えなくてもいいよ", sprite:"通常会.png"},
+   {name:"ノズル", text:"どちらにせよ君に集めてもらうから", sprite:"通常会.png"},
+   {name:"ノズル", text:"あ、まあこんな事言ってるけどただの学校探検ゲームだから", sprite:"通常会.png"},
+   {name:"ノズル", text:"残り18日のときに思いついたから正直そこまで制作できなかったんだよね。", sprite:"通常会.png"},
+   {name:"ノズル", text:"まあ、思い出の場所に行って思いでひたひたのつゆだく牛丼でもいいし、", sprite:"通常会.png"},
+ {name:"ノズル", text:"ゆっくりしていってよ", sprite:"通常会.png"},
+ {name:"ノズル", text:"あ、いい忘れてたけどこの会話Tでスキップ可能なんだよね。", sprite:"通常会.png"},
+   {name:"ノズル", text:"なんならあのくるくる画面でさえ全く必要ないし、", sprite:"通常会.png"},
+   {name:"ノズル", text:"それじゃあ", sprite:"通常会.png"},
+];
+
+let index = 0;
+let charIndex = 0;
+let isTyping = false;
+let fullText = "";
+
+const textBox = document.getElementById("textBox");
+const nameBox = document.getElementById("nameBox");
+const character = document.getElementById("character");
+
+function startDialogue(){
+  document.getElementById("dialogue").style.display = "flex";
+  nextDialogue();
+}
+
+function typeText(text){
+  isTyping = true;
+  fullText = text;
+  charIndex = 0;
+  textBox.innerHTML = "";
+  typeWriter();
+}
+
+function typeWriter(){
+  if(charIndex < fullText.length){
+    textBox.innerHTML += fullText[charIndex];
+    charIndex++;
+    setTimeout(typeWriter,40);
+  }else{
+    isTyping = false;
+  }
+}
+
+function nextDialogue(){
+  if(isTyping){
+    textBox.innerHTML = fullText;
+    isTyping = false;
+    return;
+  }
+
+if(index >= dialogue.length){
+  return;
+}
+
+
+  let d = dialogue[index];
+  nameBox.textContent = d.name;
+  character.src = d.sprite;
+  typeText(d.text);
+  index++;
+}
+
+document.addEventListener("keydown", e => {
+
+  // スペース → 会話送り
+  if(e.code === "Space"){
+    nextDialogue();
+  }
+
+  // Tキー → 探検画面へ移動
+  if(e.code === "KeyT"){
+    window.location.href = "探検.html";
+  }
+
+});
+
+</script>
+
+</body>
+</html>

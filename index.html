@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>懺悔</title>
+<style>
+  body{
+    font-family: Arial;
+    text-align:center;
+    margin-top:100px;
+  }
+
+  #goBtn{
+    display:none;
+    margin-top:10px;
+  }
+
+  input{
+    background-color: white;
+    border: 2px solid white;
+    padding: 8px;
+  }
+</style>
+</head>
+<body>
+
+<h3>
+私りょうAは今まで隠していたことがあります<br>
+ブロック解除をしたのは私です<br>
+タブ整理を怠ったばかりに起こしてしまった結果です<br>
+拡張機能のところが開けなくなったのは私達がブロック解除しすぎた結果です。<br>
+どうか許してください神様久保田様３の２の仏様(笑)<br>
+昔久保田先生に尋ねてみました。<br>
+久保田先生は巨乳派か貧乳派か<br>
+そしたら久保田先生は答えました。<br>
+"大は小を兼ねる"と<br>
+某はその言葉に深く感心したことを今でも覚えています。<br>
+そんな雑談をするためだけにこのサイトを作ったと思いますか？<br>
+→|
+</h3>
+
+<br>
+
+<input type="password" id="pass">
+<br><br>
+<button onclick="check()">確認</button>
+
+<br><br>
+
+<button id="goBtn" onclick="goNext()">次へ進む</button>
+
+<script>
+function check(){
+  const password = "012068-014t";
+  const input = document.getElementById("pass").value;
+
+  if(input === password){
+    document.getElementById("goBtn").style.display = "inline-block";
+  }else{
+    alert("QRなくしてなかったらわかるよね");
+  }
+}
+
+function goNext(){
+  // 同じフォルダ内の別ファイルへ移動
+  window.location.href = "くるっぽー.html";
+}
+</script>
+
+</body>
+</html>
